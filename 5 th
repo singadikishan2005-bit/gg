@@ -1,0 +1,31 @@
+sudo apt update
+
+java --version (select 25 version)
+
+sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
+
+echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt update
+
+sudo apt install jenkins
+
+sudo systemctl enable jenkins
+
+sudo systemctl start jenkins
+
+sudo systemctl status jenkins
+
+http://  ipv4 adress  :8080
+
+inbound rules: ssh
+			custom tcp
+			all traffic 
+port range 8080 select ipv4 
+
+sudo cat (paste the path coppied)
+install suggested pluggins
+
