@@ -1,0 +1,42 @@
+deploy.yml:
+
+- name: Deploy Maven Artifact
+  hosts: web
+  become: yes
+  tasks:
+  - name: copy JAR file
+    copy:
+     src: /var/lib/jenkins/workspace/prgm8/my-Application/maven-example/target/maven-example-1.0-SNAPSHOT.jar
+     dest: /opt/maven-example-1.0-SNAPSHOT.jar
+     
+  - name: Run application
+    shell: nohup java -jar/opt/maven-example-1.0-SNAPSHOT.jar &
+
+hosts.ini:
+
+[web]
+localhost ansible_connection = local
+
+pipeline code:
+
+pipeline {
+    agent any
+    stages {
+        stage ('Checkout') {
+            steps {
+                git url: 'https://github.com/singadikishan2005-bit/devops.git'
+            }
+        }
+        stage ('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage ('Deploy') {
+            steps {
+                sh 'ansible-playbook deploy.yml'
+            }
+        }
+    }
+}
+
