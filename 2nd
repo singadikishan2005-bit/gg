@@ -1,0 +1,100 @@
+sudo apt update
+sudo apt install maven
+sudo apt install tree
+
+
+mvn archetype:generate -DgroupId=com.example -DartifactId=myapp -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+cd myapp
+nano pom.xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>myapp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+     <properties>
+	<maven.compiler.source>11</maven.compiler.source>
+	<maven.compiler.target>11</maven.compiler.target>
+     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+		<source>11</source>
+		<target>11</target>
+                    <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                    <useSystemOut>true</useSystemOut>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+
+cd src/main/java/com/example/
+nano App.java
+
+package com.example;
+
+public class App {
+
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public static void main(String[] args) {
+        App app = new App();
+
+        int result = app.add(2, 3);
+        System.out.println("2 + 3 = " + result);
+
+        System.out.println("Application executed successfully!");
+    }
+}
+
+cd ../../../../..
+
+cd  src/test/java/com/example/
+nano AppTest.java
+
+package com.example;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+public class AppTest {
+
+    @Test
+    public void testAdd() {
+        App app = new App();
+        int result = app.add(2, 3);
+
+        System.out.println("Running test: 2 + 3 = " + result);
+
+        Assert.assertEquals(5, result);
+    }
+}
+
+mvn compile
+
+mvn test
+
+mvn package
+
+java -cp target/myapp-1.0-SNAPSHOT.jar com.example.App
