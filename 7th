@@ -1,0 +1,27 @@
+sudo apt install ansible -y
+
+nano hosts.ini
+
+[local]
+localhost ansible_connection=local
+
+nano setup.yml
+
+---
+- name: Basic Server Setup
+  hosts: localhost
+  connection: local   
+  become: yes
+
+  tasks:
+    - name: update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install wget
+      apt:
+        name: wget
+        state: present
+
+ansible-playbook -i hosts.ini setup.yml
+
