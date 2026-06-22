@@ -1,0 +1,56 @@
+cd my-Application
+
+git init
+ls -a
+git add .
+
+git commit -m " lab6"
+git push "repository"
+
+username: your email
+password: token
+
+pipeline 
+{
+		agent any
+		stages 
+		{
+			stage('Checkout') 
+			{
+			steps {
+			// Check out code from Git repository
+git credentialsId: 'lab6pswd', url: 'https://github.com/badrinathk/devopslab123.git'
+		}
+	}
+	stage('Build') 
+	{
+	steps {
+		dir('maven-example'){
+		// Run Maven build
+		sh 'mvn clean package'
+			}
+		}
+	}
+	stage('Test') {
+		steps {
+			dir('maven-example'){
+			// Optionally, separate test execution if needed
+				sh 'mvn test'
+				}
+			}
+		}
+}
+post 
+{
+	always {
+		// Archive test reports
+		junit '**/target/surefire-reports/*.xml'
+		}
+	success {
+		echo 'Build and tests succeeded!'
+		}
+		failure {
+			echo 'Build or tests failed.'
+			}
+}
+}
